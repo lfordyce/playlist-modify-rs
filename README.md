@@ -25,4 +25,6 @@ cat assets/playlist.m3u8 | cargo run -- -f resolution -d desc
 cargo run -- -i https://lw.bamgrid.com/2.0/hls/vod/bam/ms02/hls/dplus/bao/master_unenc_hdr10_all.m3u8 -f bandwidth -d asc
 # Capture results into .m3u8 file
 cat assets/playlist.m3u8 | cargo run > results.m3u8
+# In release mode
+cargo run --release -- --input=https://lw.bamgrid.com/2.0/hls/vod/bam/ms02/hls/dplus/bao/master_unenc_hdr10_all.m3u8
 ```
