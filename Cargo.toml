@@ -8,6 +8,5 @@ anyhow = "~1.0"
 clap = { version = "4", features = ["derive"] }
 either = "1.10.0"
 itertools = "0.13.0"
-m3u8-rs = "6.0.0"
 reqwest = { version = "0.12", default-features = true, features = ["blocking"] }
 tap = "1.0.1"
