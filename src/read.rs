@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 use std::fmt::{Display, Formatter};
-use std::io::{BufRead, BufReader, Read};
+use std::io::{BufRead, BufReader, Read, Write};
 
 use crate::attribute::AttributePairs;
 
@@ -14,6 +14,11 @@ pub struct MasterPlaylist {
 impl MasterPlaylist {
     pub(crate) const HEADER: &'static str = "#EXTM3U";
     pub(crate) const INDEPENDENT_SEGMENTS: &'static str = "#EXT-X-INDEPENDENT-SEGMENTS";
+
+    pub fn write_to<T: Write>(&self, w: &mut T) -> std::io::Result<()> {
+        write!(w, "{}", self)?;
+        Ok(())
+    }
 }
 
 impl Display for MasterPlaylist {
@@ -137,7 +142,7 @@ fn collect_btree<'a>(
         .collect::<BTreeMap<String, String>>()
 }
 
-pub fn parse_playlist_alt<T: Read>(reader: BufReader<T>) -> MasterPlaylist {
+pub fn parse_playlist<T: Read>(reader: BufReader<T>) -> MasterPlaylist {
     let mut lines = reader
         .lines()
         .map_while(Result::ok)
@@ -197,14 +202,14 @@ pub fn parse_playlist_alt<T: Read>(reader: BufReader<T>) -> MasterPlaylist {
 
 #[cfg(test)]
 mod tests {
-    use crate::read::parse_playlist_alt;
+    use crate::read::parse_playlist;
     use std::io::BufReader;
 
     #[test]
     fn basic_parse_alt() {
         let f = std::fs::File::open("assets/playlist.m3u8").unwrap();
 
-        let playlist = parse_playlist_alt(BufReader::new(f));
+        let playlist = parse_playlist(BufReader::new(f));
         println!("{}", playlist)
     }
 }

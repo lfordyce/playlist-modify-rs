@@ -41,7 +41,7 @@ impl From<InputType> for Input {
                 }
             }
             .pipe(BufReader::new);
-            let playlist = read::parse_playlist_alt(buf_read);
+            let playlist = read::parse_playlist(buf_read);
 
             tx.send(playlist)?;
 
@@ -62,7 +62,7 @@ pub fn run() -> Result<(), Box<dyn std::error::Error + Sync + Send>> {
             direction: config.direction,
         }];
         sort::by_fields(&mut parsed.entries, &fields);
-        println!("{}", parsed);
+        parsed.write_to(&mut io::stdout()).expect("write to stdout");
     }
     Ok(())
 }
